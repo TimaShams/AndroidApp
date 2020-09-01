@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyFirstAndroidApp</string>
+    <string name="friends_list">Friends List</string>
+    <string name="event_list">Event List</string>
+    <string name="to_do_list">To do list</string>
+    <string name="label">labelstring</string>
+    <string name="updateButton">Update</string>
+</resources>
