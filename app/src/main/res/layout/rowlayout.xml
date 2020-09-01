@@ -17,5 +17,11 @@
         android:text="@string/label"
         android:textSize="14sp" />
 
+    <TextView
+        android:id="@+id/labell"
+        android:layout_width="381dp"
+        android:layout_height="wrap_content"
+        android:text="@string/label"
+        android:textSize="14sp" />
 
 </LinearLayout>
