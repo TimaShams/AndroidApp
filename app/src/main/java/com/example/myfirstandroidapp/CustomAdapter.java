@@ -12,7 +12,6 @@ import android.content.Context;
 import java.util.ArrayList;
 
 
-
 public class CustomAdapter extends ArrayAdapter<Friend> {
     private final Context context;
     private final ArrayList<Friend> values;

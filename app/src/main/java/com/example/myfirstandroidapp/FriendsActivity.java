@@ -21,11 +21,13 @@ public class FriendsActivity extends AppCompatActivity {
 
     CustomAdapter testadapter;
 
+    //first
+    //name, last name, gender, age and address
 
     private DatabaseManager mydManager;
     private TextView response;
     private ListView studentRec;
-    private EditText stuId, fname, lname,yob,gender;
+    private EditText address, fname, lname, age ,gender;
     private Button addButton;
     private Button updateButton;
     private TableLayout addLayout;
@@ -58,13 +60,13 @@ public class FriendsActivity extends AppCompatActivity {
 
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                stuId = (EditText)findViewById(R.id.stuId);
+                address = (EditText)findViewById(R.id.stuId);
                 fname = (EditText)findViewById(R.id.fname);
                 lname = (EditText)findViewById(R.id.lanme);
-                yob = (EditText)findViewById(R.id.yob);
+                age = (EditText)findViewById(R.id.yob);
                 gender = (EditText)findViewById(R.id.gender);
 
-                recInserted = mydManager.addRow(Integer.parseInt(stuId.getText().toString()), fname.getText().toString() , lname.getText().toString()  , Integer.parseInt(yob.getText().toString())  , gender.getText().toString() );
+                recInserted = mydManager.addRow(Integer.parseInt(address.getText().toString()), fname.getText().toString() , lname.getText().toString()  , Integer.parseInt(age.getText().toString())  , gender.getText().toString() );
                 addLayout.setVisibility(View.GONE);
                 if (recInserted) {
                     response.setText("The row in the student table is inserted");
@@ -75,10 +77,10 @@ public class FriendsActivity extends AppCompatActivity {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(gender.getWindowToken(),    InputMethodManager.HIDE_NOT_ALWAYS);
                 mydManager.close();
-                stuId.setText("");
+                address.setText("");
                 fname.setText("");
                 lname.setText("");
-                yob.setText("");
+                age.setText("");
                 gender.setText("");
 
                 studentRec.setAdapter(null);
