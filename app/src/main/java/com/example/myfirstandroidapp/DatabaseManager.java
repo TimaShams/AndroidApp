@@ -59,7 +59,6 @@ public class DatabaseManager {
 
     public ArrayList<Friend> retrieveRows() {
 
-        ArrayList<String> studentRows = new ArrayList<String>();
         ArrayList<Friend> substudentRows = new ArrayList<Friend>();
 
         String[] columns = new String[] {"StudentID", "FirstName", "LastName" , "YearOfBirth" , "Gender"};
@@ -68,8 +67,6 @@ public class DatabaseManager {
         while (cursor.isAfterLast() == false) {
 
             Friend s = new Friend(cursor.getInt(0), cursor.getString(1) , cursor.getString(2) , cursor.getInt(3) , cursor.getString(4));
-            //substudentRows.add(Integer.toString(cursor.getInt(0)) + ", " + cursor.getString(1) + ", " + cursor.getString(2) );
-            //studentRows.add(Integer.toString(cursor.getInt(0)) + ", " + cursor.getString(1) + ", " + cursor.getString(2) + ", " + Integer.toString(cursor.getInt(3))+ ", " + cursor.getString(4));
             substudentRows.add(s);
             cursor.moveToNext();
         }

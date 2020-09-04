@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AddFriendActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);

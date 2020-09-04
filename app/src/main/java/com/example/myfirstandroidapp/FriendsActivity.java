@@ -157,8 +157,7 @@ public class FriendsActivity extends AppCompatActivity {
         addTableLayout.setVisibility(View.VISIBLE);
         response.setText("Enter information of the new product");
         studentRecordListView.setVisibility(View.GONE);
-//        Intent intent = new Intent(context, AddFriendActivity.class);
-//        startActivity(intent);
+
 
         return true;
     }
@@ -196,15 +195,12 @@ public class FriendsActivity extends AppCompatActivity {
     }
 
     public void Submit (View v) {
-        boolean[] checkboxes = friendAdapter.getCheckBoxState();
 
         String st = "You select ";
         for (int i = 0; i < studentRecordListView.getCount(); i++) {
-            if (checkboxes[i] == true)
+            if (true)
                 mydManager.deleteSingleRow(friendAdapter.getID(i));
             showRec();
-            //st = st + testadapter.getID(i) + " ";// list.getAdapter().getItem(i).toString();
-
         }
         Toast.makeText(getApplicationContext(), st + "out of " + studentRecordListView.getCount() + " items! ", Toast.LENGTH_LONG).show();
     }
