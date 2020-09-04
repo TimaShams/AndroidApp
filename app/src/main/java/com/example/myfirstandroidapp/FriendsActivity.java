@@ -1,7 +1,6 @@
 package com.example.myfirstandroidapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +24,6 @@ public class FriendsActivity extends AppCompatActivity {
 
     CustomAdapter friendAdapter;
 
-    //first
-    //name, last name, gender, age and address
 
     private DatabaseManager mydManager;
     private TextView response;
@@ -48,31 +45,35 @@ public class FriendsActivity extends AppCompatActivity {
         // DataBase
 
         mydManager = new DatabaseManager(context);
-        response = (TextView)findViewById(R.id.response);
+        mydManager.openReadable();
 
-        studentRecordListView = (ListView)findViewById(R.id.studentRec);
-        addTableLayout = (TableLayout)findViewById(R.id.add_table);
-        addTableLayout.setVisibility(View.GONE);
+        // Data
+        final ArrayList<Friend> tableContent = mydManager.retrieveRows();
+
+
+
+
+        response = (TextView)findViewById(R.id.response);
         response.setText("Press MENU button to display menu");
 
-        addButton = (Button) findViewById(R.id.add_button);
+        // View
+        studentRecordListView = (ListView)findViewById(R.id.studentRec);
+        studentRecordListView.setVisibility(View.VISIBLE);
+
+
+        // Update
         updateButton = (Button) findViewById(R.id.updateButton);
         updateButton.setVisibility(View.GONE);
 
-
-
-        //
-        updateButton.setVisibility(View.VISIBLE);
-        addTableLayout.setVisibility(View.GONE);
-        studentRecordListView.setVisibility(View.VISIBLE);
-        mydManager.openReadable();
-
-        final ArrayList<Friend> tableContent = mydManager.retrieveRows();
-
-        response.setText("The rows in the products table are: \n");
-        friendAdapter = new CustomAdapter(this, tableContent);
+        // Adapter
+        friendAdapter = new CustomAdapter(this, tableContent , mydManager);
         studentRecordListView.setAdapter(friendAdapter);
 
+
+        // Add
+        addTableLayout = (TableLayout)findViewById(R.id.add_table);
+        addTableLayout.setVisibility(View.GONE);
+        addButton = (Button) findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 address = (EditText)findViewById(R.id.stuId);
@@ -175,7 +176,7 @@ public class FriendsActivity extends AppCompatActivity {
         response.setText("The rows in the products table are: \n");
 
         // test lines
-        friendAdapter = new CustomAdapter(this, tableContent);
+        friendAdapter = new CustomAdapter(this, tableContent, mydManager);
         studentRecordListView.setAdapter(friendAdapter);
         return true;
     }

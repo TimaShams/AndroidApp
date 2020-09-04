@@ -2,7 +2,6 @@ package com.example.myfirstandroidapp;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -26,7 +25,7 @@ public class CustomAdapter extends ArrayAdapter<Friend> {
     ViewHolder viewHolder;
 
     // Constructor
-    public CustomAdapter(Context context, ArrayList<Friend> friendListValues) {
+    public CustomAdapter(Context context, ArrayList<Friend> friendListValues, DatabaseManager mydManager) {
         super(context, R.layout.rowlayout, friendListValues);
         this.context = context;
         this.friendListValues = friendListValues;
@@ -76,7 +75,6 @@ public class CustomAdapter extends ArrayAdapter<Friend> {
         viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-
                 Toast toast = Toast.makeText(context, friendListValues.get(position).getFname() , Toast.LENGTH_SHORT);
                 toast.show();
 
