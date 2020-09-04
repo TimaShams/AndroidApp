@@ -1,11 +1,13 @@
 package com.example.myfirstandroidapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -15,22 +17,24 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 
 public class FriendsActivity extends AppCompatActivity {
 
-    CustomAdapter testadapter;
+    CustomAdapter friendAdapter;
 
     //first
     //name, last name, gender, age and address
 
     private DatabaseManager mydManager;
     private TextView response;
-    private ListView studentRec;
+    private ListView studentRecordListView;
     private EditText address, fname, lname, age ,gender;
     private Button addButton;
     private Button updateButton;
-    private TableLayout addLayout;
+    private TableLayout addTableLayout;
     private boolean recInserted;
     final Context context = this;
 
@@ -39,24 +43,35 @@ public class FriendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.friend_main);
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
+        setContentView(R.layout.friend_main); // includes content_main
 
         // DataBase
 
-
         mydManager = new DatabaseManager(context);
         response = (TextView)findViewById(R.id.response);
-        studentRec = (ListView)findViewById(R.id.studentRec);
-        addLayout = (TableLayout)findViewById(R.id.add_table);
-        addLayout.setVisibility(View.GONE);
+
+        studentRecordListView = (ListView)findViewById(R.id.studentRec);
+        addTableLayout = (TableLayout)findViewById(R.id.add_table);
+        addTableLayout.setVisibility(View.GONE);
         response.setText("Press MENU button to display menu");
 
         addButton = (Button) findViewById(R.id.add_button);
         updateButton = (Button) findViewById(R.id.updateButton);
         updateButton.setVisibility(View.GONE);
+
+
+
+        //
+        updateButton.setVisibility(View.VISIBLE);
+        addTableLayout.setVisibility(View.GONE);
+        studentRecordListView.setVisibility(View.VISIBLE);
+        mydManager.openReadable();
+
+        final ArrayList<Friend> tableContent = mydManager.retrieveRows();
+
+        response.setText("The rows in the products table are: \n");
+        friendAdapter = new CustomAdapter(this, tableContent);
+        studentRecordListView.setAdapter(friendAdapter);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -67,7 +82,7 @@ public class FriendsActivity extends AppCompatActivity {
                 gender = (EditText)findViewById(R.id.gender);
 
                 recInserted = mydManager.addRow(Integer.parseInt(address.getText().toString()), fname.getText().toString() , lname.getText().toString()  , Integer.parseInt(age.getText().toString())  , gender.getText().toString() );
-                addLayout.setVisibility(View.GONE);
+                addTableLayout.setVisibility(View.GONE);
                 if (recInserted) {
                     response.setText("The row in the student table is inserted");
                 }
@@ -83,9 +98,24 @@ public class FriendsActivity extends AppCompatActivity {
                 age.setText("");
                 gender.setText("");
 
-                studentRec.setAdapter(null);
+                studentRecordListView.setAdapter(null);
             }
         });
+
+
+        studentRecordListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Friend friend= tableContent.get(position);
+
+                Snackbar.make(view, friend.getFname() , Snackbar.LENGTH_LONG)
+                        .setAction("No action", null).show();
+
+                System.out.println("BOoooooooooooooo");
+            }
+        });
+
 
     }
 
@@ -121,50 +151,60 @@ public class FriendsActivity extends AppCompatActivity {
 
     public boolean insertRec() {
 
+
         updateButton.setVisibility(View.GONE);
-        addLayout.setVisibility(View.VISIBLE);
+        addTableLayout.setVisibility(View.VISIBLE);
         response.setText("Enter information of the new product");
-        studentRec.setVisibility(View.GONE);
+        studentRecordListView.setVisibility(View.GONE);
+//        Intent intent = new Intent(context, AddFriendActivity.class);
+//        startActivity(intent);
+
         return true;
     }
 
+
+
     public boolean showRec() {
+
         updateButton.setVisibility(View.VISIBLE);
-        addLayout.setVisibility(View.GONE);
-        studentRec.setVisibility(View.VISIBLE);
+        addTableLayout.setVisibility(View.GONE);
+        studentRecordListView.setVisibility(View.VISIBLE);
         mydManager.openReadable();
         ArrayList<Friend> tableContent = mydManager.retrieveRows();
 
         response.setText("The rows in the products table are: \n");
-        // Back if wrong
-        //ArrayAdapter<String> arrayAdpt = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tableContent);
-        //studentRec.setAdapter(arrayAdpt);
-
 
         // test lines
-        testadapter = new CustomAdapter(this, tableContent);
-        studentRec.setAdapter(testadapter);
+        friendAdapter = new CustomAdapter(this, tableContent);
+        studentRecordListView.setAdapter(friendAdapter);
         return true;
     }
 
     public boolean removeRecs() {
         mydManager.clearRecords();
         response.setText("All Records are removed");
-        studentRec.setAdapter(null);
+        studentRecordListView.setAdapter(null);
+        return true;
+    }
+
+    public boolean editRecs() {
+        mydManager.clearRecords();
+        response.setText("All Records are removed");
+        studentRecordListView.setAdapter(null);
         return true;
     }
 
     public void Submit (View v) {
-        boolean[] checkboxes = testadapter.getCheckBoxState();
+        boolean[] checkboxes = friendAdapter.getCheckBoxState();
 
         String st = "You select ";
-        for (int i = 0; i < studentRec.getCount(); i++) {
+        for (int i = 0; i < studentRecordListView.getCount(); i++) {
             if (checkboxes[i] == true)
-                mydManager.deleteSingleRow(testadapter.getID(i));
+                mydManager.deleteSingleRow(friendAdapter.getID(i));
             showRec();
             //st = st + testadapter.getID(i) + " ";// list.getAdapter().getItem(i).toString();
 
         }
-        Toast.makeText(getApplicationContext(), st + "out of " + studentRec.getCount() + " items! ", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), st + "out of " + studentRecordListView.getCount() + " items! ", Toast.LENGTH_LONG).show();
     }
 }
