@@ -1,4 +1,4 @@
-package com.example.myfirstandroidapp;
+package com.example.myfirstandroidapp.Classes;
 
 public class Friend {
 

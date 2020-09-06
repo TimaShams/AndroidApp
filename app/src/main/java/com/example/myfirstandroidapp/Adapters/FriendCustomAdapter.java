@@ -1,4 +1,4 @@
-package com.example.myfirstandroidapp;
+package com.example.myfirstandroidapp.Adapters;
 
 
 import android.content.Context;
@@ -7,18 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.example.myfirstandroidapp.Database.DatabaseManager;
+import com.example.myfirstandroidapp.Classes.Friend;
+import com.example.myfirstandroidapp.R;
+
 import java.util.ArrayList;
 
 
-public class CustomAdapter extends ArrayAdapter<Friend> {
+public class FriendCustomAdapter extends ArrayAdapter<Friend> {
     private final Context context;
     private final ArrayList<Friend> friendListValues;
 
     ViewHolder viewHolder;
 
     // Constructor
-    public CustomAdapter(Context context, ArrayList<Friend> friendListValues, DatabaseManager mydManager) {
-        super(context, R.layout.rowlayout, friendListValues);
+    public FriendCustomAdapter(Context context, ArrayList<Friend> friendListValues, DatabaseManager mydManager) {
+        super(context, R.layout.rowlayout_friend, friendListValues);
         this.context = context;
         this.friendListValues = friendListValues;
     }
@@ -39,7 +44,7 @@ public class CustomAdapter extends ArrayAdapter<Friend> {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.rowlayout, null);
+            convertView = inflater.inflate(R.layout.rowlayout_friend, null);
             viewHolder = new ViewHolder();
 
             //cache the views

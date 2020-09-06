@@ -1,4 +1,4 @@
-package com.example.myfirstandroidapp;
+package com.example.myfirstandroidapp.Friends;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,13 +16,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myfirstandroidapp.Adapters.FriendCustomAdapter;
+import com.example.myfirstandroidapp.Classes.Friend;
+import com.example.myfirstandroidapp.Database.DatabaseManager;
+import com.example.myfirstandroidapp.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 public class FriendsActivity extends AppCompatActivity {
 
-    CustomAdapter friendAdapter;
+    FriendCustomAdapter friendAdapter;
 
 
     private DatabaseManager mydManager;
@@ -40,7 +44,7 @@ public class FriendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.friend_main); // includes content_main
+        setContentView(R.layout.activity_friend); // includes content_main
 
         // DataBase
 
@@ -66,7 +70,7 @@ public class FriendsActivity extends AppCompatActivity {
         updateButton.setVisibility(View.GONE);
 
         // Adapter
-        friendAdapter = new CustomAdapter(this, tableContent , mydManager);
+        friendAdapter = new FriendCustomAdapter(this, tableContent , mydManager);
         studentRecordListView.setAdapter(friendAdapter);
 
 
@@ -175,7 +179,7 @@ public class FriendsActivity extends AppCompatActivity {
         response.setText("The rows in the products table are: \n");
 
         // test lines
-        friendAdapter = new CustomAdapter(this, tableContent, mydManager);
+        friendAdapter = new FriendCustomAdapter(this, tableContent, mydManager);
         studentRecordListView.setAdapter(friendAdapter);
         return true;
     }
