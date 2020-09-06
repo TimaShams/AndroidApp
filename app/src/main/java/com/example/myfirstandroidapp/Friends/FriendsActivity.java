@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myfirstandroidapp.Adapters.FriendCustomAdapter;
 import com.example.myfirstandroidapp.Classes.Friend;
-import com.example.myfirstandroidapp.Database.DatabaseManager;
+import com.example.myfirstandroidapp.Database.FriendDataBaseManager;
 import com.example.myfirstandroidapp.R;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,7 +29,7 @@ public class FriendsActivity extends AppCompatActivity {
     FriendCustomAdapter friendAdapter;
 
 
-    private DatabaseManager mydManager;
+    private FriendDataBaseManager mydManager;
     private TextView response;
     private ListView studentRecordListView;
     private EditText address, fname, lname, age ,gender;
@@ -48,7 +48,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         // DataBase
 
-        mydManager = new DatabaseManager(context);
+        mydManager = new FriendDataBaseManager(context);
         mydManager.openReadable();
 
         // Data

@@ -10,6 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"/>
-    <include layout="@layout/content_friend" />
+    <include layout="@layout/content_todo" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

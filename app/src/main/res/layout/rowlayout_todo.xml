@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <CheckBox
-            android:id="@+id/checkBox2"
+            android:id="@+id/taskstatuscheckbox"
             android:layout_width="102dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -32,19 +32,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tasknamelabel"
+                android:id="@+id/taskname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TaskName" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/tasklocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/taskstatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView" />

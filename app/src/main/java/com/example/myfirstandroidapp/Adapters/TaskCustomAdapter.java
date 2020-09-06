@@ -8,36 +8,35 @@ package com.example.myfirstandroidapp.Adapters;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.ArrayAdapter;
+        import android.widget.CheckBox;
         import android.widget.TextView;
 
-        import com.example.myfirstandroidapp.Database.DatabaseManager;
-        import com.example.myfirstandroidapp.Classes.Friend;
+        import com.example.myfirstandroidapp.Classes.Task;
         import com.example.myfirstandroidapp.R;
 
         import java.util.ArrayList;
 
-public class TaskCustomAdapter extends ArrayAdapter<Friend> {
+public class TaskCustomAdapter extends ArrayAdapter<Task> {
 
     private final Context context;
-    private final ArrayList<Friend> friendListValues;
+    private final ArrayList<Task> taskArray;
 
     ViewHolder viewHolder;
 
     // Constructor
-    public TaskCustomAdapter(Context context, ArrayList<Friend> friendListValues) {
-        super(context, R.layout.rowlayout_todo, friendListValues);
+    public TaskCustomAdapter(Context context, ArrayList<Task> taskArray) {
+        super(context, R.layout.rowlayout_todo, taskArray);
         this.context = context;
-        this.friendListValues = friendListValues;
+        this.taskArray = taskArray;
     }
 
 
     // A single raw class
     private class ViewHolder {
-        TextView labelText;
-
-        public TextView getLabelText() {
-            return labelText;
-        }
+        TextView nameLabel;
+        TextView locationLabel;
+        TextView statusLabel;
+        CheckBox statusCB;
     }
 
     @Override
@@ -50,19 +49,26 @@ public class TaskCustomAdapter extends ArrayAdapter<Friend> {
             viewHolder = new ViewHolder();
 
             //cache the views
-            viewHolder.labelText = (TextView) convertView.findViewById(R.id.tasknamelabel);
+            viewHolder.nameLabel = (TextView) convertView.findViewById(R.id.taskname);
+            viewHolder.locationLabel = (TextView) convertView.findViewById(R.id.tasklocation);
+            viewHolder.statusLabel = (TextView) convertView.findViewById(R.id.taskstatus);
+            viewHolder.statusCB = (CheckBox) convertView.findViewById(R.id.taskstatuscheckbox);
 
             //link the cached views to the convertview
             convertView.setTag(viewHolder);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
-        viewHolder.labelText.setText("form");
+        viewHolder.nameLabel.setText(taskArray.get(position).getName());
+        viewHolder.locationLabel.setText(taskArray.get(position).getLocation());
+        viewHolder.statusLabel.setText( Boolean.toString(taskArray.get(position).isStatus()) );
+        viewHolder.statusCB.setSelected(taskArray.get(position).isStatus());
+
         return convertView;
     }
 
 
     public int getID(int pos) {
-        int val = friendListValues.get(pos).getId();
+        int val = taskArray.get(pos).getId();
         return val;
     }
 

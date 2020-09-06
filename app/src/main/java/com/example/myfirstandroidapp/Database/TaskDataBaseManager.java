@@ -1,33 +1,34 @@
+
 package com.example.myfirstandroidapp.Database;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+        import android.content.ContentValues;
+        import android.content.Context;
+        import android.database.Cursor;
+        import android.database.sqlite.SQLiteDatabase;
+        import android.database.sqlite.SQLiteOpenHelper;
+        import android.util.Log;
 
-import com.example.myfirstandroidapp.Classes.Friend;
+        import com.example.myfirstandroidapp.Classes.*;
 
-import java.util.ArrayList;
+        import java.util.ArrayList;
 
-public class DatabaseManager {
+public class TaskDataBaseManager {
 
-    public static final String DB_NAME = "StudentRecords";
-    public static final String DB_TABLE = "StudentInfo";
+    public static final String DB_NAME = "TaskRecords";
+    public static final String DB_TABLE = "TaskInfo";
     public static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (StudentID INTEGER, FirstName TEXT, LastName TEXT, YearOfBirth INTEGER , Gender TEXT );";
+    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (TaskID INTEGER, Title TEXT, Location TEXT, Status Boolean );";
     private SQLHelper helper;
     private SQLiteDatabase db;
     private Context context;
 
-    public DatabaseManager(Context c) {
+    public TaskDataBaseManager(Context c) {
         this.context = c;
         helper = new SQLHelper(c);
         this.db = helper.getWritableDatabase();
     }
 
-    public DatabaseManager openReadable() throws android.database.SQLException {
+    public TaskDataBaseManager openReadable() throws android.database.SQLException {
         helper = new SQLHelper(context);
         db = helper.getReadableDatabase();
         return this;
@@ -37,15 +38,14 @@ public class DatabaseManager {
         helper.close();
     }
 
-    public boolean addRow(Integer id, String fname, String lname , Integer yob , String gender) {
+    public boolean addRow(Integer id, String title, String location , Boolean status) {
         synchronized(this.db) {
 
             ContentValues newProduct = new ContentValues();
-            newProduct.put("StudentID", id);
-            newProduct.put("FirstName", fname);
-            newProduct.put("LastName", lname);
-            newProduct.put("YearOfBirth", yob);
-            newProduct.put("Gender", gender);
+            newProduct.put("TaskID", id);
+            newProduct.put("Title", title);
+            newProduct.put("Location", location);
+            newProduct.put("Status", status);
 
             try {
                 db.insertOrThrow(DB_TABLE, null, newProduct);
@@ -59,24 +59,24 @@ public class DatabaseManager {
         }
     }
 
-    public ArrayList<Friend> retrieveRows() {
+    public ArrayList<Task> retrieveRows() {
 
-        ArrayList<Friend> substudentRows = new ArrayList<Friend>();
+        ArrayList<Task> taskRows = new ArrayList<Task>();
 
-        String[] columns = new String[] {"StudentID", "FirstName", "LastName" , "YearOfBirth" , "Gender"};
+        String[] columns = new String[] {"TaskID", "Title", "Location" , "Status" };
         Cursor cursor = db.query(DB_TABLE, columns, null, null, null, null, null);
         cursor.moveToFirst();
         while (cursor.isAfterLast() == false) {
 
-            Friend s = new Friend(cursor.getInt(0), cursor.getString(1) , cursor.getString(2) , cursor.getInt(3) , cursor.getString(4));
-            substudentRows.add(s);
+            Task s = new Task(cursor.getInt(0), cursor.getString(1) , cursor.getString(2) , cursor.getInt(3) > 0);
+            taskRows.add(s);
             cursor.moveToNext();
         }
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();
         }
 
-        return substudentRows;
+        return taskRows;
         //return studentRows;
     }
 
@@ -89,7 +89,7 @@ public class DatabaseManager {
     public void deleteSingleRow(int id)
     {
         db = helper.getWritableDatabase();
-        db.delete(DB_TABLE,"StudentID=?",new String[]{id+""});
+        db.delete(DB_TABLE,"TaskID=?",new String[]{id+""});
         db.close();
     }
 

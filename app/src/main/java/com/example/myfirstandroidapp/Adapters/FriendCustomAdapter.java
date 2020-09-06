@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.myfirstandroidapp.Database.DatabaseManager;
+import com.example.myfirstandroidapp.Database.FriendDataBaseManager;
 import com.example.myfirstandroidapp.Classes.Friend;
 import com.example.myfirstandroidapp.R;
 
@@ -22,7 +22,7 @@ public class FriendCustomAdapter extends ArrayAdapter<Friend> {
     ViewHolder viewHolder;
 
     // Constructor
-    public FriendCustomAdapter(Context context, ArrayList<Friend> friendListValues, DatabaseManager mydManager) {
+    public FriendCustomAdapter(Context context, ArrayList<Friend> friendListValues, FriendDataBaseManager mydManager) {
         super(context, R.layout.rowlayout_friend, friendListValues);
         this.context = context;
         this.friendListValues = friendListValues;
