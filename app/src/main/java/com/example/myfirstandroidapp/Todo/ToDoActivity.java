@@ -39,11 +39,10 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
         private ListView taskListView;
         private EditText location, title;
         private Button addButton;
-        private TableLayout addTableLayout;
         private boolean recInserted;
         final Context context = this;
         private int taskId = 100;
-
+        private ArrayList<Task> tableContent;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             setTheme(R.style.AppTheme);
@@ -53,15 +52,11 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
             // DataBase
 
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FireMissilesDialogFragment fmdl = new FireMissilesDialogFragment(ToDoActivity.this);
-            fmdl.show(fragmentManager,"dialog");
-
             mydManager = new TaskDataBaseManager(context);
             mydManager.openReadable();
 
             // Data
-            final ArrayList<Task> tableContent = mydManager.retrieveRows();
+            tableContent = mydManager.retrieveRows();
 
             response = (TextView)findViewById(R.id.response);
             response.setText("Press MENU button to display menu");
@@ -78,42 +73,24 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
 
 
             // Add
-            addTableLayout = (TableLayout)findViewById(R.id.add_table);
-            addTableLayout.setVisibility(View.GONE);
+
             addButton = (Button) findViewById(R.id.add_button);
             addButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-
-                    title = (EditText)findViewById(R.id.taskname);
-                    location = (EditText)findViewById(R.id.tasklocation);
-                    recInserted = mydManager.addRow(taskId++, title.getText().toString() , location.getText().toString()  , false);
-                    addTableLayout.setVisibility(View.GONE);
-                    if (recInserted) {
-                        response.setText("The row in the student table is inserted");
-                    }
-                    else {
-                        response.setText("Sorry, errors when inserting to DB");
-                    }
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(location.getWindowToken(),    InputMethodManager.HIDE_NOT_ALWAYS);
-                    mydManager.close();
-                    location.setText("");
-                    title.setText("");
-                    taskListView.setAdapter(null);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FireMissilesDialogFragment fmdl = new FireMissilesDialogFragment(ToDoActivity.this);
+                    fmdl.show(fragmentManager,"dialog");
                 }
             });
-
 
             taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     Task task= tableContent.get(position);
-
                     Snackbar.make(view, task.getId() , Snackbar.LENGTH_LONG)
                             .setAction("No action", null).show();
-
                 }
             });
 
@@ -122,8 +99,6 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
 
         public boolean insertRec() {
 
-
-            addTableLayout.setVisibility(View.VISIBLE);
             response.setText("Enter information of the new product");
             taskListView.setVisibility(View.GONE);
             return true;
@@ -133,7 +108,6 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
 
         public boolean showRec() {
 
-            addTableLayout.setVisibility(View.GONE);
             taskListView.setVisibility(View.VISIBLE);
             mydManager.openReadable();
             ArrayList<Task> tableContent = mydManager.retrieveRows();
@@ -176,12 +150,19 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
         recInserted = mydManager.addRow(taskId++, first , second  , false);
         if (recInserted) {
             response.setText("The row in the student table is inserted");
-            finish();
-            startActivity(getIntent());
         }
         else {
             response.setText("Sorry, errors when inserting to DB");
         }
+        mydManager.openReadable();
+        tableContent = mydManager.retrieveRows();
+
+        // View
+        taskListView = (ListView)findViewById(R.id.taskRec);
+        taskListView.setVisibility(View.VISIBLE);
+        taskAdapter = new TaskCustomAdapter(this, tableContent);
+        taskListView.setAdapter(taskAdapter);
+
     }
 
     @Override

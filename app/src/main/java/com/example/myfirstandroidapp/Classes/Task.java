@@ -7,6 +7,9 @@ public class Task {
     private String location  = "";
     private boolean status = false;
 
+    public Task() {
+    }
+
     public Task(int id, String name, String location , Boolean status ) {
         this.id = id;
         this.name = name;

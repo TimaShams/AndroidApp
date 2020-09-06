@@ -11,4 +11,6 @@
     <string name="fire">fff</string>
     <string name="cancel">cancel</string>
     <string name="signin">ok</string>
+    <string name="add">Add</string>
+    <string name="Cancel">Cancel</string>
 </resources>

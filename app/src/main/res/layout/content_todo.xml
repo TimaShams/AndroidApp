@@ -4,52 +4,12 @@
     android:layout_height="match_parent"
     android:paddingTop="60dp">
 
-    <TableLayout
-        android:id="@+id/add_table"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="0dp">
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/taskname"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="title" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/tasklocation"
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
-        </TableRow>
-    </TableLayout>
-
     <Button
         android:id="@+id/add_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="Add" />
-
-    <Button
-        android:id="@+id/cancel_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dip"
-        android:text="Cancel" />
+        android:padding="0dp"
+        android:text="@string/add" />
 
     <ListView
         android:id="@+id/taskRec"
