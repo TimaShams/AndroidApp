@@ -22,7 +22,7 @@ public class AddFriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_friend_layout); // includes content_main
+        setContentView(R.layout.add_friend_layout); // includes content
     }
 
 
