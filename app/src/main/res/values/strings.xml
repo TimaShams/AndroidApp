@@ -5,4 +5,10 @@
     <string name="to_do_list">To do list</string>
     <string name="label">labelstring</string>
     <string name="updateButton">Update</string>
+    <string name="username">user_name</string>
+    <string name="password">password</string>
+    <string name="dialog_fire_missiles">test</string>
+    <string name="fire">fff</string>
+    <string name="cancel">cancel</string>
+    <string name="signin">ok</string>
 </resources>

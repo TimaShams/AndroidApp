@@ -4,13 +4,6 @@
     android:layout_height="match_parent"
     android:paddingTop="60dp">
 
-    <Button
-        android:id="@+id/updateButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="Submit"
-        android:text="@string/updateButton" />
-
     <TableLayout
         android:id="@+id/add_table"
         android:layout_width="match_parent"

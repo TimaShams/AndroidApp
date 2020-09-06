@@ -1,6 +1,9 @@
 package com.example.myfirstandroidapp.Todo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +18,8 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.myfirstandroidapp.FireMissilesDialogFragment;
 import com.example.myfirstandroidapp.R;
 import com.example.myfirstandroidapp.Adapters.*;
 import com.example.myfirstandroidapp.Classes.*;
@@ -24,7 +29,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 
-public class ToDoActivity extends AppCompatActivity {
+public class ToDoActivity extends  FragmentActivity implements FireMissilesDialogFragment.NoticeDialogListener {
+
 
         TaskCustomAdapter taskAdapter;
 
@@ -33,12 +39,10 @@ public class ToDoActivity extends AppCompatActivity {
         private ListView taskListView;
         private EditText location, title;
         private Button addButton;
-        private Button updateButton;
         private TableLayout addTableLayout;
         private boolean recInserted;
         final Context context = this;
         private int taskId = 100;
-
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,11 @@ public class ToDoActivity extends AppCompatActivity {
             setContentView(R.layout.activity_todo); // includes content_main
 
             // DataBase
+
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FireMissilesDialogFragment fmdl = new FireMissilesDialogFragment(ToDoActivity.this);
+            fmdl.show(fragmentManager,"dialog");
 
             mydManager = new TaskDataBaseManager(context);
             mydManager.openReadable();
@@ -62,9 +71,6 @@ public class ToDoActivity extends AppCompatActivity {
             taskListView.setVisibility(View.VISIBLE);
 
 
-            // Update
-            updateButton = (Button) findViewById(R.id.updateButton);
-            updateButton.setVisibility(View.GONE);
 
             // Adapter
             taskAdapter = new TaskCustomAdapter(this, tableContent);
@@ -78,6 +84,7 @@ public class ToDoActivity extends AppCompatActivity {
             addButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
+
                     title = (EditText)findViewById(R.id.taskname);
                     location = (EditText)findViewById(R.id.tasklocation);
                     recInserted = mydManager.addRow(taskId++, title.getText().toString() , location.getText().toString()  , false);
@@ -113,45 +120,12 @@ public class ToDoActivity extends AppCompatActivity {
 
         }
 
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            getMenuInflater().inflate(R.menu.menu_main, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId();
-
-            switch (item.getItemId()) {
-                case R.id.insert_rows:
-                    insertRec();
-                    break;
-                case R.id.list_rows:
-                    showRec();
-                    break;
-                case R.id.remove_rows:
-                    removeRecs();
-                    break;
-            }
-            //return true;
-            return super.onOptionsItemSelected(item);
-        }
-
-
         public boolean insertRec() {
 
 
-            updateButton.setVisibility(View.GONE);
             addTableLayout.setVisibility(View.VISIBLE);
             response.setText("Enter information of the new product");
             taskListView.setVisibility(View.GONE);
-
-
             return true;
         }
 
@@ -159,7 +133,6 @@ public class ToDoActivity extends AppCompatActivity {
 
         public boolean showRec() {
 
-            updateButton.setVisibility(View.VISIBLE);
             addTableLayout.setVisibility(View.GONE);
             taskListView.setVisibility(View.VISIBLE);
             mydManager.openReadable();
@@ -197,5 +170,23 @@ public class ToDoActivity extends AppCompatActivity {
             }
             Toast.makeText(getApplicationContext(), st + "out of " + taskListView.getCount() + " items! ", Toast.LENGTH_LONG).show();
         }
+
+    @Override
+    public void onDialogPositiveClick( DialogFragment dialog , String first, String second) {
+        recInserted = mydManager.addRow(taskId++, first , second  , false);
+        if (recInserted) {
+            response.setText("The row in the student table is inserted");
+            finish();
+            startActivity(getIntent());
+        }
+        else {
+            response.setText("Sorry, errors when inserting to DB");
+        }
     }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
+}
 
