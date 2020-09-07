@@ -16,8 +16,10 @@ public class TaskDataBaseManager {
 
     public static final String DB_NAME = "TaskRecords";
     public static final String DB_TABLE = "TaskInfo";
+
     public static final int DB_VERSION = 1;
     private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (TaskID INTEGER, Title TEXT, Location TEXT, Status Boolean );";
+
     private SQLHelper helper;
     private SQLiteDatabase db;
     private Context context;
@@ -47,6 +49,7 @@ public class TaskDataBaseManager {
             newProduct.put("Location", location);
             newProduct.put("Status", status);
 
+
             try {
                 db.insertOrThrow(DB_TABLE, null, newProduct);
             } catch (Exception e) {
@@ -58,6 +61,7 @@ public class TaskDataBaseManager {
             return true;
         }
     }
+
 
     public ArrayList<Task> retrieveRows() {
 
@@ -93,7 +97,12 @@ public class TaskDataBaseManager {
         db.close();
     }
 
-
+    public void editTaskStatus(int id , Boolean status )
+    {
+        ContentValues cv = new ContentValues();
+        cv.put("Status",status);
+        db.update("TaskInfo", cv, "TaskID = ?", new String[]{id+""});
+    }
 
     public class SQLHelper extends SQLiteOpenHelper {
         public SQLHelper (Context c) {

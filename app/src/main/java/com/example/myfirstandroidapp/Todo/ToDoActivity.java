@@ -1,25 +1,21 @@
 package com.example.myfirstandroidapp.Todo;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myfirstandroidapp.FireMissilesDialogFragment;
+import com.example.myfirstandroidapp.TaskDialog;
 import com.example.myfirstandroidapp.R;
 import com.example.myfirstandroidapp.Adapters.*;
 import com.example.myfirstandroidapp.Classes.*;
@@ -29,7 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 
-public class ToDoActivity extends  FragmentActivity implements FireMissilesDialogFragment.NoticeDialogListener {
+public class ToDoActivity extends  FragmentActivity implements TaskDialog.NoticeDialogListener , TaskCustomAdapter.DataTransferInterface {
 
 
         TaskCustomAdapter taskAdapter;
@@ -49,8 +45,8 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_todo); // includes content_main
 
-            // DataBase
 
+            // DataBase
 
             mydManager = new TaskDataBaseManager(context);
             mydManager.openReadable();
@@ -68,7 +64,7 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
 
 
             // Adapter
-            taskAdapter = new TaskCustomAdapter(this, tableContent);
+            taskAdapter = new TaskCustomAdapter(this, tableContent , this);
             taskListView.setAdapter(taskAdapter);
 
 
@@ -79,7 +75,7 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
 
                 public void onClick(View v) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
-                    FireMissilesDialogFragment fmdl = new FireMissilesDialogFragment(ToDoActivity.this);
+                    TaskDialog fmdl = new TaskDialog(ToDoActivity.this);
                     fmdl.show(fragmentManager,"dialog");
                 }
             });
@@ -89,7 +85,7 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     Task task= tableContent.get(position);
-                    Snackbar.make(view, task.getId() , Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, task.bringID() , Snackbar.LENGTH_LONG)
                             .setAction("No action", null).show();
                 }
             });
@@ -115,7 +111,7 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
             response.setText("The rows in the products table are: \n");
 
             // test lines
-            taskAdapter = new TaskCustomAdapter(this, tableContent);
+            taskAdapter = new TaskCustomAdapter(this, tableContent , this);
             taskListView.setAdapter(taskAdapter);
             return true;
         }
@@ -147,7 +143,23 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
 
     @Override
     public void onDialogPositiveClick( DialogFragment dialog , String first, String second) {
-        recInserted = mydManager.addRow(taskId++, first , second  , false);
+
+        SharedPreferences TaskID = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = TaskID.edit();
+        System.out.println(TaskID.contains("ID"));
+        if(!TaskID.contains("ID"))
+        {
+            editor.putInt("ID" , 1000);
+        }
+        else
+        {
+            editor.putInt("ID" , TaskID.getInt("ID", -1)+1);
+        }
+
+        editor.commit();
+
+        recInserted = mydManager.addRow(TaskID.getInt("ID", -1), first , second  , false);
+
         if (recInserted) {
             response.setText("The row in the student table is inserted");
         }
@@ -160,13 +172,20 @@ public class ToDoActivity extends  FragmentActivity implements FireMissilesDialo
         // View
         taskListView = (ListView)findViewById(R.id.taskRec);
         taskListView.setVisibility(View.VISIBLE);
-        taskAdapter = new TaskCustomAdapter(this, tableContent);
+        taskAdapter = new TaskCustomAdapter(this, tableContent , this);
         taskListView.setAdapter(taskAdapter);
 
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onSetValues(int id , boolean status) {
+        mydManager.editTaskStatus(id,status);
+        System.out.println(id+" "+status);
 
     }
 }

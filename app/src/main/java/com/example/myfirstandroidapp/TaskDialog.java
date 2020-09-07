@@ -6,19 +6,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import org.w3c.dom.Text;
-
-public class FireMissilesDialogFragment extends DialogFragment {
+public class TaskDialog extends DialogFragment {
 
     Context context;
-    public FireMissilesDialogFragment(Context context) {
+    public TaskDialog(Context context) {
         this.context = context;
     }
 
@@ -43,12 +38,12 @@ public class FireMissilesDialogFragment extends DialogFragment {
                         EditText first=(EditText) dialogObj.findViewById(R.id.first);
                         EditText second=(EditText) dialogObj.findViewById(R.id.second);
                         // mListener.onDialogPositiveClick(etUsr.getText().toString(), etUsr.getText().toString());
-                        mListener.onDialogPositiveClick(FireMissilesDialogFragment.this,first.getText().toString() , second.getText().toString());
+                        mListener.onDialogPositiveClick(TaskDialog.this,first.getText().toString() , second.getText().toString());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        FireMissilesDialogFragment.this.getDialog().cancel();
+                        TaskDialog.this.getDialog().cancel();
                     }
                 });
         return builder.create();
@@ -63,7 +58,6 @@ public class FireMissilesDialogFragment extends DialogFragment {
     }
 
     // Use this instance of the interface to deliver action events
-    NoticeDialogListener listener;
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -80,9 +74,9 @@ public class FireMissilesDialogFragment extends DialogFragment {
         }
     }
 
-    public void setListener(NoticeDialogListener mListener) {
-        // now u set value on your listener
-        this.mListener = mListener;
-    }
+//    public void setListener(NoticeDialogListener mListener) {
+//        // now u set value on your listener
+//        this.mListener = mListener;
+//    }
 
 }

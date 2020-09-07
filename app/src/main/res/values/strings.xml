@@ -13,4 +13,5 @@
     <string name="signin">ok</string>
     <string name="add">Add</string>
     <string name="Cancel">Cancel</string>
+    <integer name="TaskID">1000</integer>
 </resources>
