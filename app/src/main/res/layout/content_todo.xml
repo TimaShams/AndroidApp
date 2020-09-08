@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:paddingTop="60dp">
 
+    <Spinner
+        android:id="@+id/taskSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/add_button"
         android:layout_width="match_parent"

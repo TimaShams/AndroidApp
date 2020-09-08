@@ -14,4 +14,9 @@
     <string name="add">Add</string>
     <string name="Cancel">Cancel</string>
     <integer name="TaskID">1000</integer>
+    <string-array name="task_types">
+        <item>All</item>
+        <item>Completed</item>
+        <item>Uncompleted</item>
+    </string-array>
 </resources>

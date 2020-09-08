@@ -9,23 +9,23 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myfirstandroidapp.TaskDialog;
 import com.example.myfirstandroidapp.R;
 import com.example.myfirstandroidapp.Adapters.*;
 import com.example.myfirstandroidapp.Classes.*;
 import com.example.myfirstandroidapp.Database.*;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 
-public class ToDoActivity extends  FragmentActivity implements TaskDialog.NoticeDialogListener , TaskCustomAdapter.DataTransferInterface {
+public class ToDoActivity extends  FragmentActivity implements TaskDialog.NoticeDialogListener , TaskCustomAdapter.DataTransferInterface , AdapterView.OnItemSelectedListener {
 
 
         TaskCustomAdapter taskAdapter;
@@ -35,16 +35,31 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
         private ListView taskListView;
         private EditText location, title;
         private Button addButton;
+        private Spinner spinner;
         private boolean recInserted;
         final Context context = this;
         private int taskId = 100;
         private ArrayList<Task> tableContent;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
+
+
+
+
+
             setTheme(R.style.AppTheme);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_todo); // includes content_main
 
+
+
+            spinner = (Spinner) findViewById(R.id.taskSpinner);
+
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                    R.array.task_types, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+            spinner.setOnItemSelectedListener(this);
 
             // DataBase
 
@@ -52,7 +67,7 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
             mydManager.openReadable();
 
             // Data
-            tableContent = mydManager.retrieveRows();
+            //tableContent = mydManager.retrieveRows();
 
             response = (TextView)findViewById(R.id.response);
             response.setText("Press MENU button to display menu");
@@ -62,10 +77,8 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
             taskListView.setVisibility(View.VISIBLE);
 
 
-
             // Adapter
-            taskAdapter = new TaskCustomAdapter(this, tableContent , this);
-            taskListView.setAdapter(taskAdapter);
+
 
 
             // Add
@@ -80,15 +93,15 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
                 }
             });
 
-            taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    Task task= tableContent.get(position);
-                    Snackbar.make(view, task.bringID() , Snackbar.LENGTH_LONG)
-                            .setAction("No action", null).show();
-                }
-            });
+//            taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                    Task task= tableContent.get(position);
+//                    Snackbar.make(view, task.bringID() , Snackbar.LENGTH_LONG)
+//                            .setAction("No action", null).show();
+//                }
+//            });
 
 
         }
@@ -185,7 +198,88 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
     @Override
     public void onSetValues(int id , boolean status) {
         mydManager.editTaskStatus(id,status);
+        int i = spinner.getSelectedItemPosition();
+        System.out.println("position is "+i);
+
+        ArrayList<Task> list = new ArrayList<Task>();
+        ArrayList<Task> fullList =  mydManager.retrieveRows();
+        if(i==0)
+        {
+            tableContent =fullList;
+
+        }
+        else if(i==1)
+        {
+
+            for ( int j = 0 ; j < fullList.size() ; j++){
+                if(fullList.get(j).isStatus())
+                    list.add(fullList.get(j));
+            }
+            tableContent  = list;
+
+        }
+        else if (i==2)
+        {
+            for ( int j = 0 ; j < fullList.size() ; j++){
+                if(!fullList.get(j).isStatus())
+                    list.add(fullList.get(j));
+            }
+            tableContent  = list;
+
+        }
+
+
+        taskAdapter = new TaskCustomAdapter(this, tableContent , this);
+        taskListView.setAdapter(taskAdapter);
+        taskAdapter.notifyDataSetChanged();
+
         System.out.println(id+" "+status);
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+        ArrayList<Task> list = new ArrayList<Task>();
+        ArrayList<Task> fullList =  mydManager.retrieveRows();
+        if(i==0)
+        {
+
+            tableContent =fullList;
+
+        }
+        else if(i==1)
+        {
+
+            for ( int j = 0 ; j < fullList.size() ; j++){
+                if(fullList.get(j).isStatus())
+                    list.add(fullList.get(j));
+            }
+            tableContent  = list;
+
+        }
+        else if (i==2)
+        {
+            for ( int j = 0 ; j < fullList.size() ; j++){
+                if(!fullList.get(j).isStatus())
+                    list.add(fullList.get(j));
+            }
+            tableContent  = list;
+
+        }
+
+
+        taskAdapter = new TaskCustomAdapter(this, tableContent , this);
+        taskListView.setAdapter(taskAdapter);
+        taskAdapter.notifyDataSetChanged();
+
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        tableContent = mydManager.retrieveRows();
 
     }
 }

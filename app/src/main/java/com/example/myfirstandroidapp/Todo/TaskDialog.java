@@ -1,4 +1,4 @@
-package com.example.myfirstandroidapp;
+package com.example.myfirstandroidapp.Todo;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.myfirstandroidapp.R;
 
 public class TaskDialog extends DialogFragment {
 
