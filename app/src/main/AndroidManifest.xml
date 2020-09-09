@@ -34,6 +34,11 @@
             android:label="@string/app_name">
         </activity>
 
+        <activity
+            android:name=".Events.EventsActivity"
+            android:label="@string/app_name">
+        </activity>
+
     </application>
 
 </manifest>
