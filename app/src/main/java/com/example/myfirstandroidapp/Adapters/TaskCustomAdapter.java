@@ -30,8 +30,6 @@ public class TaskCustomAdapter extends ArrayAdapter<Task> {
         this.context = context;
         this.taskArray = taskArray;
         this.dtInterface = dtInterface;
-
-        checkBoxState = new boolean[taskArray.size()];
     }
 
 

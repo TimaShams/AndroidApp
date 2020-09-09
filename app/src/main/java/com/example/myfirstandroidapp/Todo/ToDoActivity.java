@@ -12,8 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +23,11 @@ import com.example.myfirstandroidapp.Classes.*;
 import com.example.myfirstandroidapp.Database.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
-public class ToDoActivity extends  FragmentActivity implements TaskDialog.NoticeDialogListener , TaskCustomAdapter.DataTransferInterface , AdapterView.OnItemSelectedListener {
+public class ToDoActivity extends  FragmentActivity implements TaskDialog.NoticeDialogListener , ExpandableListAdapter.DataTransferInterface ,  TaskCustomAdapter.DataTransferInterface , AdapterView.OnItemSelectedListener {
 
 
         TaskCustomAdapter taskAdapter;
@@ -35,12 +37,18 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
         private ListView taskListView;
         private EditText location, title;
         private Button addButton;
-        private Spinner spinner;
         private boolean recInserted;
         final Context context = this;
         private int taskId = 100;
         private ArrayList<Task> tableContent;
-        @Override
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    List<String> listDataHeader;
+    HashMap<String, List<String>> listDataChild;
+    ArrayList<Task> completedList;
+    ArrayList<Task> unCompletedList;
+
+    @Override
         protected void onCreate(Bundle savedInstanceState) {
 
 
@@ -51,20 +59,26 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_todo); // includes content_main
 
-
-
-            spinner = (Spinner) findViewById(R.id.taskSpinner);
-
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                    R.array.task_types, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-            spinner.setOnItemSelectedListener(this);
-
             // DataBase
 
             mydManager = new TaskDataBaseManager(context);
             mydManager.openReadable();
+
+
+        // get the listview
+        expListView = (ExpandableListView) findViewById(R.id.lvExp);
+
+        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
+        {
+            public boolean onGroupClick(ExpandableListView arg0, View itemView, int itemPosition, long itemId)
+            {
+                expListView.expandGroup(itemPosition);
+                return true;
+            }
+        });
+
+        // preparing list data
+        prepareDBdata();
 
             // Data
             //tableContent = mydManager.retrieveRows();
@@ -106,7 +120,7 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
 
         }
 
-        public boolean insertRec() {
+    public boolean insertRec() {
 
             response.setText("Enter information of the new product");
             taskListView.setVisibility(View.GONE);
@@ -179,6 +193,7 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
         else {
             response.setText("Sorry, errors when inserting to DB");
         }
+
         mydManager.openReadable();
         tableContent = mydManager.retrieveRows();
 
@@ -197,90 +212,64 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
 
     @Override
     public void onSetValues(int id , boolean status) {
+
         mydManager.editTaskStatus(id,status);
-        int i = spinner.getSelectedItemPosition();
-        System.out.println("position is "+i);
-
-        ArrayList<Task> list = new ArrayList<Task>();
-        ArrayList<Task> fullList =  mydManager.retrieveRows();
-        if(i==0)
-        {
-            tableContent =fullList;
-
-        }
-        else if(i==1)
-        {
-
-            for ( int j = 0 ; j < fullList.size() ; j++){
-                if(fullList.get(j).isStatus())
-                    list.add(fullList.get(j));
-            }
-            tableContent  = list;
-
-        }
-        else if (i==2)
-        {
-            for ( int j = 0 ; j < fullList.size() ; j++){
-                if(!fullList.get(j).isStatus())
-                    list.add(fullList.get(j));
-            }
-            tableContent  = list;
-
-        }
-
-
-        taskAdapter = new TaskCustomAdapter(this, tableContent , this);
-        taskListView.setAdapter(taskAdapter);
-        taskAdapter.notifyDataSetChanged();
-
+        prepareDBdata();
         System.out.println(id+" "+status);
+
+
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-
-        ArrayList<Task> list = new ArrayList<Task>();
-        ArrayList<Task> fullList =  mydManager.retrieveRows();
-        if(i==0)
-        {
-
-            tableContent =fullList;
-
-        }
-        else if(i==1)
-        {
-
-            for ( int j = 0 ; j < fullList.size() ; j++){
-                if(fullList.get(j).isStatus())
-                    list.add(fullList.get(j));
-            }
-            tableContent  = list;
-
-        }
-        else if (i==2)
-        {
-            for ( int j = 0 ; j < fullList.size() ; j++){
-                if(!fullList.get(j).isStatus())
-                    list.add(fullList.get(j));
-            }
-            tableContent  = list;
-
-        }
-
-
-        taskAdapter = new TaskCustomAdapter(this, tableContent , this);
-        taskListView.setAdapter(taskAdapter);
-        taskAdapter.notifyDataSetChanged();
-
+        prepareDBdata();
 
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        tableContent = mydManager.retrieveRows();
+        prepareDBdata();
 
     }
+
+
+    ArrayList<String> taskHeader;
+    HashMap<String, ArrayList<Task>> taskHeaderChild;
+
+    private void prepareDBdata() {
+
+
+        taskHeader = new ArrayList<String>();
+        taskHeaderChild = new HashMap<String, ArrayList<Task>>();
+        taskHeader.add("Completed");
+        taskHeader.add("UnCompleted");
+
+        completedList = new ArrayList<Task>();
+        unCompletedList = new ArrayList<Task>();
+        ArrayList<Task> fullList =  mydManager.retrieveRows();
+
+        for ( int j = 0 ; j < fullList.size() ; j++)
+            if(fullList.get(j).isStatus())
+                completedList.add(fullList.get(j));
+
+
+        for ( int j = 0 ; j < fullList.size() ; j++)
+            if(!fullList.get(j).isStatus())
+                unCompletedList.add(fullList.get(j));
+
+
+        taskHeaderChild.put(taskHeader.get(0), completedList); // Header, Child data
+        taskHeaderChild.put(taskHeader.get(1), unCompletedList);
+        listAdapter = new ExpandableListAdapter(this , taskHeader , taskHeaderChild , this );
+
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
+    }
+
+
+
 }
 
