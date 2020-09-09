@@ -100,15 +100,6 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
                 }
             });
 
-//            taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                    Task task= tableContent.get(position);
-//                    Snackbar.make(view, task.bringID() , Snackbar.LENGTH_LONG)
-//                            .setAction("No action", null).show();
-//                }
-//            });
 
 
         }

@@ -1,30 +1,41 @@
 package com.example.myfirstandroidapp.Events;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import com.example.myfirstandroidapp.R;
 
-        import android.os.Bundle;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
         import android.view.View;
         import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
-        import android.widget.CheckBox;
+import android.widget.Button;
         import android.widget.ListView;
         import android.widget.Toast;
 
 import com.example.myfirstandroidapp.Adapters.*;
 
 
+
 public class EventsActivity extends AppCompatActivity {
+
+    final Context context = this;
 
     ListView list;
     boolean[] checkBoxes;
     int boxIndex = 0;
     EventCustomAdapter adapter;
-
+    Button addButton;
 
     public void onCreate(Bundle icicle) {
+        setTheme(R.style.AppTheme);
         super.onCreate(icicle);
         setContentView(R.layout.activity_event);
+
+
+
         list = (ListView) findViewById(R.id.lvExp);
         String[] values = new String[]{
                 "Android", "iPhone", "WindowsMobile",
@@ -39,6 +50,18 @@ public class EventsActivity extends AppCompatActivity {
         list = (ListView) findViewById(R.id.EventList);
         list.setAdapter(adapter);
 
+
+        addButton = (Button) findViewById(R.id.newEvent);
+        addButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+
+                Intent intent = new Intent(context, AddEventActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
     }
     public void Submit (View v) {
         boolean[] checkboxes = adapter.getCheckBoxState();
