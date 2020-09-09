@@ -68,14 +68,7 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
         // get the listview
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener()
-        {
-            public boolean onGroupClick(ExpandableListView arg0, View itemView, int itemPosition, long itemId)
-            {
-                expListView.expandGroup(itemPosition);
-                return true;
-            }
-        });
+
 
         // preparing list data
         prepareDBdata();
@@ -194,14 +187,7 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
             response.setText("Sorry, errors when inserting to DB");
         }
 
-        mydManager.openReadable();
-        tableContent = mydManager.retrieveRows();
-
-        // View
-        taskListView = (ListView)findViewById(R.id.taskRec);
-        taskListView.setVisibility(View.VISIBLE);
-        taskAdapter = new TaskCustomAdapter(this, tableContent , this);
-        taskListView.setAdapter(taskAdapter);
+        prepareDBdata();
 
     }
 
@@ -266,6 +252,8 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
+        expListView.expandGroup(0);
+        expListView.expandGroup(1);
         listAdapter.notifyDataSetChanged();
     }
 
