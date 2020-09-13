@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,11 +22,13 @@ import com.example.myfirstandroidapp.R;
 import com.example.myfirstandroidapp.Adapters.*;
 import com.example.myfirstandroidapp.Classes.*;
 import com.example.myfirstandroidapp.Database.*;
+import com.hudomju.swipe.SwipeToDismissTouchListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class ToDoActivity extends  FragmentActivity implements TaskDialog.NoticeDialogListener , ExpandableListAdapter.DataTransferInterface ,  TaskCustomAdapter.DataTransferInterface , AdapterView.OnItemSelectedListener {
 
@@ -100,9 +103,7 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
                 }
             });
 
-
-
-        }
+    }
 
     public boolean insertRec() {
 
@@ -220,8 +221,8 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
 
         taskHeader = new ArrayList<String>();
         taskHeaderChild = new HashMap<String, ArrayList<Task>>();
-        taskHeader.add("Completed");
         taskHeader.add("UnCompleted");
+        taskHeader.add("Completed");
 
         completedList = new ArrayList<Task>();
         unCompletedList = new ArrayList<Task>();
@@ -237,8 +238,8 @@ public class ToDoActivity extends  FragmentActivity implements TaskDialog.Notice
                 unCompletedList.add(fullList.get(j));
 
 
-        taskHeaderChild.put(taskHeader.get(0), completedList); // Header, Child data
-        taskHeaderChild.put(taskHeader.get(1), unCompletedList);
+        taskHeaderChild.put(taskHeader.get(0), unCompletedList); // Header, Child data
+        taskHeaderChild.put(taskHeader.get(1), completedList);
         listAdapter = new ExpandableListAdapter(this , taskHeader , taskHeaderChild , this );
 
         // setting list adapter

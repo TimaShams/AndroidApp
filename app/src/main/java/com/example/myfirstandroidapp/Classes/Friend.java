@@ -1,28 +1,26 @@
 package com.example.myfirstandroidapp.Classes;
 
-public class Friend {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    private int id = 0;
-    private String fname  = "";
-    private String lname  = "";
-    private int yob = 5;
+import java.io.Serializable;
+
+public class Friend implements Serializable {
+
+    private int friendID = 0;
+    private String fname = "";
+    private String lname = "";
     private String gender  = "";
+    private int age = 0;
+    private String address  = "";
 
-    public Friend(int id, String fname, String lname , int yob , String gender) {
-        this.id = id;
+    public Friend(int friendID , String fname, String lname, String gender , int age , String address) {
+        this.friendID = friendID;
         this.fname = fname;
         this.lname = lname;
-        this.yob = yob;
         this.gender = gender;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.age = age;
+        this.address = address;
     }
 
 
@@ -42,14 +40,6 @@ public class Friend {
         this.lname = lname;
     }
 
-    public int getYob() {
-        return yob;
-    }
-
-    public void setYob(int yob) {
-        this.yob = yob;
-    }
-
     public String getGender() {
         return gender;
     }
@@ -58,6 +48,29 @@ public class Friend {
         this.gender = gender;
     }
 
+    public int getAge() {
+        return age;
+    }
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+    public int getFriendID() {
+        return friendID;
+    }
+
+    public void setFriendID(int friendID) {
+        this.friendID = friendID;
+    }
 }
 

@@ -7,8 +7,10 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -16,9 +18,10 @@ import android.widget.TextView;
 import com.example.myfirstandroidapp.Classes.Task;
 import com.example.myfirstandroidapp.R;
 import com.example.myfirstandroidapp.Todo.ToDoActivity;
+import com.hudomju.swipe.adapter.ViewAdapter;
 
 
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ExpandableListAdapter extends BaseExpandableListAdapter implements ViewAdapter {
 
     ViewHolder viewHolder;
 
@@ -48,6 +51,54 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
+    }
+
+    public void remove(int position) {
+    }
+
+    @Override
+    public Context getContext() {
+        return null;
+    }
+
+    @Override
+    public int getWidth() {
+        return 0;
+    }
+
+    @Override
+    public int getChildCount() {
+        return 0;
+    }
+
+    @Override
+    public void getLocationOnScreen(int[] locations) {
+
+    }
+
+    @Override
+    public View getChildAt(int index) {
+        return null;
+    }
+
+    @Override
+    public int getChildPosition(View position) {
+        return 0;
+    }
+
+    @Override
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
+
+    @Override
+    public void onTouchEvent(MotionEvent e) {
+
+    }
+
+    @Override
+    public Object makeScrollListener(AbsListView.OnScrollListener listener) {
+        return null;
     }
 
     // A single raw class

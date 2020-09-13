@@ -5,17 +5,20 @@ package com.example.myfirstandroidapp.Adapters;
 
         import android.content.Context;
         import android.view.LayoutInflater;
+        import android.view.MotionEvent;
         import android.view.View;
         import android.view.ViewGroup;
+        import android.widget.AbsListView;
         import android.widget.ArrayAdapter;
         import android.widget.CheckBox;
         import android.widget.TextView;
         import com.example.myfirstandroidapp.Classes.Task;
         import com.example.myfirstandroidapp.R;
+        import com.hudomju.swipe.adapter.ViewAdapter;
 
         import java.util.ArrayList;
 
-public class TaskCustomAdapter extends ArrayAdapter<Task> {
+public class TaskCustomAdapter extends ArrayAdapter<Task> implements ViewAdapter {
 
     private final Context context;
     private final ArrayList<Task> taskArray;
@@ -30,6 +33,46 @@ public class TaskCustomAdapter extends ArrayAdapter<Task> {
         this.context = context;
         this.taskArray = taskArray;
         this.dtInterface = dtInterface;
+    }
+
+    @Override
+    public int getWidth() {
+        return 0;
+    }
+
+    @Override
+    public int getChildCount() {
+        return 0;
+    }
+
+    @Override
+    public void getLocationOnScreen(int[] locations) {
+
+    }
+
+    @Override
+    public View getChildAt(int index) {
+        return null;
+    }
+
+    @Override
+    public int getChildPosition(View position) {
+        return 0;
+    }
+
+    @Override
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
+
+    @Override
+    public void onTouchEvent(MotionEvent e) {
+
+    }
+
+    @Override
+    public Object makeScrollListener(AbsListView.OnScrollListener listener) {
+        return null;
     }
 
 

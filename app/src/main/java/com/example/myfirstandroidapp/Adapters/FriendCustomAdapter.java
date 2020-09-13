@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myfirstandroidapp.Database.FriendDataBaseManager;
@@ -31,12 +33,14 @@ public class FriendCustomAdapter extends ArrayAdapter<Friend> {
 
     // A single raw class
     private class ViewHolder {
-        TextView labelText;
-
-        public TextView getLabelText() {
-            return labelText;
-        }
+        TextView nameLabel;
+        TextView ageLabel;
+        TextView genderLabel;
+        TextView addressLabel;
+        ImageButton editButton;
+        ImageView displayPicture;
     }
+
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -48,20 +52,27 @@ public class FriendCustomAdapter extends ArrayAdapter<Friend> {
             viewHolder = new ViewHolder();
 
             //cache the views
-            viewHolder.labelText = (TextView) convertView.findViewById(R.id.label);
+            viewHolder.nameLabel = (TextView) convertView.findViewById(R.id.friendNameLabel);
+            viewHolder.ageLabel = (TextView) convertView.findViewById(R.id.friendAgeLabel);
+            viewHolder.genderLabel = (TextView) convertView.findViewById(R.id.friendGenderLabel);
+            viewHolder.addressLabel = (TextView) convertView.findViewById(R.id.friendAddressLabel);
+            viewHolder.editButton = (ImageButton) convertView.findViewById(R.id.editFriendImageButton);
+            viewHolder.displayPicture = (ImageView) convertView.findViewById(R.id.friendimageView);
 
-            //link the cached views to the convertview
             convertView.setTag(viewHolder);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
-        String form = String.format("%-17d  %-17s  %-17s ", friendListValues.get(position).getId(), friendListValues.get(position).getFname(), friendListValues.get(position).getLname());
-        viewHolder.labelText.setText(form);
+        viewHolder.nameLabel.setText(friendListValues.get(position).getFname()+" "+friendListValues.get(position).getLname());
+        viewHolder.ageLabel.setText(friendListValues.get(position).getAge()+" ");
+        viewHolder.genderLabel.setText(friendListValues.get(position).getGender());
+        viewHolder.addressLabel.setText(friendListValues.get(position).getAddress());
+        //viewHolder.editButton.ste
+        //viewHolder.displayPicture
         return convertView;
     }
 
-
-    public int getID(int pos) {
-        int val = friendListValues.get(pos).getId();
+    public String getID(int pos) {
+        String val = friendListValues.get(pos).getFname();
         return val;
     }
 

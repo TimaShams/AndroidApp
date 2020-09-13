@@ -1,11 +1,15 @@
-package com.example.myfirstandroidapp.Todo;
+package com.example.myfirstandroidapp.Friends;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
@@ -19,8 +23,8 @@ public class GalleryDialog extends DialogFragment {
         this.context = context;
     }
 
-    NoticeDialogListener mListener;
-    EditText et;
+    GalleryDialog.NoticeDialogListener mListener;
+    GridView gv;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -29,7 +33,7 @@ public class GalleryDialog extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.signin, null))
+        builder.setView(inflater.inflate(R.layout.gallery_dialog, null))
 
                 // Add action buttons
                 .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
@@ -37,10 +41,17 @@ public class GalleryDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
 
                         Dialog dialogObj =Dialog.class.cast(dialog);
-                        EditText first=(EditText) dialogObj.findViewById(R.id.first);
-                        EditText second=(EditText) dialogObj.findViewById(R.id.second);
+
+                        gv = (GridView) dialogObj.findViewById(R.id.gridview);
+                        gv.setAdapter(new galleryAdapter(context));
+                        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                                Toast.makeText(context, "Image Position: " + position, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                         // mListener.onDialogPositiveClick(etUsr.getText().toString(), etUsr.getText().toString());
-                        mListener.onDialogPositiveClick(GalleryDialog.this,first.getText().toString() , second.getText().toString());
+                        mListener.onDialogPositiveClick(GalleryDialog.this,"first.getText().toString()" ," second.getText().toString()");
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -68,7 +79,7 @@ public class GalleryDialog extends DialogFragment {
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            mListener = (NoticeDialogListener) context;
+            mListener = (GalleryDialog.NoticeDialogListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(context.toString()

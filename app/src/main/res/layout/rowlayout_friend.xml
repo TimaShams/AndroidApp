@@ -7,38 +7,38 @@
     android:descendantFocusability="blocksDescendants">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/friendimageView"
         android:layout_width="100dp"
         android:layout_height="match_parent"
         app:srcCompat="@drawable/app_logo" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="278dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
         <TextView
-            android:id="@+id/label"
+            android:id="@+id/friendNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/friendAgeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/friendGenderLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/friendAddressLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView" />
@@ -49,23 +49,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:focusable="false" />
-
         <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/editFriendImageButton"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
             app:srcCompat="@android:drawable/alert_light_frame" />
-
-        <Button
-            android:id="@+id/edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/alert_dark_frame" />
     </LinearLayout>
 
 </LinearLayout>

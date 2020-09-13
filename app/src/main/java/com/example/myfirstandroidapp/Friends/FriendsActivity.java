@@ -1,11 +1,14 @@
 package com.example.myfirstandroidapp.Friends;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,18 +19,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myfirstandroidapp.Adapters.ExpandableListAdapter;
 import com.example.myfirstandroidapp.Adapters.FriendCustomAdapter;
 import com.example.myfirstandroidapp.Classes.Friend;
+import com.example.myfirstandroidapp.Classes.Task;
 import com.example.myfirstandroidapp.Database.FriendDataBaseManager;
 import com.example.myfirstandroidapp.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FriendsActivity extends AppCompatActivity {
 
     FriendCustomAdapter friendAdapter;
 
+    public static String name = "" ;
 
     private FriendDataBaseManager mydManager;
     private TextView response;
@@ -38,7 +46,10 @@ public class FriendsActivity extends AppCompatActivity {
     private TableLayout addTableLayout;
     private boolean recInserted;
     final Context context = this;
+    ArrayList<Friend> tableContent;
 
+    public FriendsActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +61,8 @@ public class FriendsActivity extends AppCompatActivity {
 
         mydManager = new FriendDataBaseManager(context);
         mydManager.openReadable();
-
         // Data
-        final ArrayList<Friend> tableContent = mydManager.retrieveRows();
-
-
-
+        tableContent = mydManager.retrieveRows();
 
         response = (TextView)findViewById(R.id.response);
         response.setText("Press MENU button to display menu");
@@ -78,49 +85,96 @@ public class FriendsActivity extends AppCompatActivity {
         addTableLayout = (TableLayout)findViewById(R.id.add_table);
         addTableLayout.setVisibility(View.GONE);
         addButton = (Button) findViewById(R.id.add_button);
+
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                address = (EditText)findViewById(R.id.stuId);
-                fname = (EditText)findViewById(R.id.fname);
-                lname = (EditText)findViewById(R.id.lanme);
-                age = (EditText)findViewById(R.id.yob);
-                gender = (EditText)findViewById(R.id.gender);
-
-                recInserted = mydManager.addRow(Integer.parseInt(address.getText().toString()), fname.getText().toString() , lname.getText().toString()  , Integer.parseInt(age.getText().toString())  , gender.getText().toString() );
-                addTableLayout.setVisibility(View.GONE);
-                if (recInserted) {
-                    response.setText("The row in the student table is inserted");
-                }
-                else {
-                    response.setText("Sorry, errors when inserting to DB");
-                }
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(gender.getWindowToken(),    InputMethodManager.HIDE_NOT_ALWAYS);
-                mydManager.close();
-                address.setText("");
-                fname.setText("");
-                lname.setText("");
-                age.setText("");
-                gender.setText("");
-
-                studentRecordListView.setAdapter(null);
+                Intent intent = new Intent(context, AddFriendActivity.class);
+                startActivity(intent);
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+
+            SharedPreferences FriendID = this.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = FriendID.edit();
+            System.out.println(FriendID.contains("friendID"));
+            if(!FriendID.contains("friendID"))
+            {
+                editor.putInt("friendID" , 1000);
+            }
+            else
+            {
+                editor.putInt("friendID" , FriendID.getInt("friendID", -1)+1);
+            }
+
+            editor.commit();
+
+            if(extras.containsKey("updateFriend"))
+            {
+                System.out.println("updateFriend Value after"+extras.getInt("updateFriend"));
+
+                mydManager.deleteSingleRow(extras.getInt("updateFriend")+"");
+                recInserted = mydManager.addRow(
+                        extras.getInt("updateFriend"),
+                        extras.getString("fname"),
+                        extras.getString("lname"),
+                        extras.getString("gender"),
+                        extras.getInt("age" , 0),
+                        extras.getString("address")
+                );
+
+            }
+            else if (extras.containsKey("deleteFriend"))
+            {
+                mydManager.deleteSingleRow(extras.getInt("deleteFriend")+"");
+
+            }else
+            {
+                recInserted = mydManager.addRow(
+                        FriendID.getInt("friendID", -1),
+                        extras.getString("fname"),
+                        extras.getString("lname"),
+                        extras.getString("gender"),
+                        extras.getInt("age" , 0),
+                        extras.getString("address")
+                );
+
+            }
+
+
+
+            if (recInserted) {
+                System.out.println("The row in the student table is inserted");
+            }
+            else {
+                System.out.println("Sorry, errors when inserting to DB");
+            }
+
+            prepareDBdata();
+
+        }
+
+
+
 
 
         studentRecordListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Friend friend= tableContent.get(position);
-
-                Snackbar.make(view, friend.getFname() , Snackbar.LENGTH_LONG)
+                Snackbar.make(view, friend.getLname() , Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
 
-                System.out.println("BOoooooooooooooo");
+                Intent intent = new Intent(context, AddFriendActivity.class);
+                intent.putExtra("FriendObject" , friend);
+                startActivity(intent);
+
             }
         });
 
+        studentRecordListView.setAdapter(friendAdapter);
+        friendAdapter.notifyDataSetChanged();
 
     }
 
@@ -208,4 +262,16 @@ public class FriendsActivity extends AppCompatActivity {
         }
         Toast.makeText(getApplicationContext(), st + "out of " + studentRecordListView.getCount() + " items! ", Toast.LENGTH_LONG).show();
     }
+
+
+    private void prepareDBdata() {
+
+        tableContent =  mydManager.retrieveRows();
+        friendAdapter = new FriendCustomAdapter(this, tableContent , mydManager);
+        // setting list adapter
+        studentRecordListView.setAdapter(friendAdapter);
+        friendAdapter.notifyDataSetChanged();
+    }
+
+
 }

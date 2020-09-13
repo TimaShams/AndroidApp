@@ -13,10 +13,10 @@ import java.util.ArrayList;
 
 public class FriendDataBaseManager {
 
-    public static final String DB_NAME = "StudentRecords";
-    public static final String DB_TABLE = "StudentInfo";
+    public static final String DB_NAME = "FriendsRecords";
+    public static final String DB_TABLE = "Freinds";
     public static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (StudentID INTEGER, FirstName TEXT, LastName TEXT, YearOfBirth INTEGER , Gender TEXT );";
+    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (FriendID INTEGER , FirstName TEXT, LastName TEXT, Gender TEXT, Age INTEGER , Address TEXT );";
     private SQLHelper helper;
     private SQLiteDatabase db;
     private Context context;
@@ -37,15 +37,16 @@ public class FriendDataBaseManager {
         helper.close();
     }
 
-    public boolean addRow(Integer id, String fname, String lname , Integer yob , String gender) {
+    public boolean addRow( int friendID , String fname, String lname , String gender , int age , String address) {
         synchronized(this.db) {
 
             ContentValues newProduct = new ContentValues();
-            newProduct.put("StudentID", id);
+            newProduct.put("FriendID", friendID);
             newProduct.put("FirstName", fname);
             newProduct.put("LastName", lname);
-            newProduct.put("YearOfBirth", yob);
             newProduct.put("Gender", gender);
+            newProduct.put("Age", age);
+            newProduct.put("Address", address);
 
             try {
                 db.insertOrThrow(DB_TABLE, null, newProduct);
@@ -61,22 +62,21 @@ public class FriendDataBaseManager {
 
     public ArrayList<Friend> retrieveRows() {
 
-        ArrayList<Friend> substudentRows = new ArrayList<Friend>();
-
-        String[] columns = new String[] {"StudentID", "FirstName", "LastName" , "YearOfBirth" , "Gender"};
+        ArrayList<Friend> friendRow = new ArrayList<Friend>();
+        String[] columns = new String[] {"FriendID" ,"FirstName", "LastName", "Gender" , "Age" , "Address"};
         Cursor cursor = db.query(DB_TABLE, columns, null, null, null, null, null);
         cursor.moveToFirst();
         while (cursor.isAfterLast() == false) {
 
-            Friend s = new Friend(cursor.getInt(0), cursor.getString(1) , cursor.getString(2) , cursor.getInt(3) , cursor.getString(4));
-            substudentRows.add(s);
+            Friend s = new Friend(cursor.getInt(0) , cursor.getString(1), cursor.getString(2) , cursor.getString(3) , cursor.getInt(4) , cursor.getString(5));
+            friendRow.add(s);
             cursor.moveToNext();
         }
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();
         }
 
-        return substudentRows;
+        return friendRow;
         //return studentRows;
     }
 
@@ -86,14 +86,12 @@ public class FriendDataBaseManager {
         db.delete(DB_TABLE, null, null);
     }
 
-    public void deleteSingleRow(int id)
+    public void deleteSingleRow(String id)
     {
         db = helper.getWritableDatabase();
-        db.delete(DB_TABLE,"StudentID=?",new String[]{id+""});
-        db.close();
+        db.delete(DB_TABLE,"FriendID=?",new String[]{id+""});
+        //db.close();
     }
-
-
 
     public class SQLHelper extends SQLiteOpenHelper {
         public SQLHelper (Context c) {
@@ -103,6 +101,7 @@ public class FriendDataBaseManager {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_TABLE);
+            System.out.println(" CREATED THE TABLE");
         }
 
         @Override

@@ -12,14 +12,14 @@
         android:orientation="vertical">
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/eventCheckBox"
             android:layout_width="50dp"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:focusable="false" />
 
         <ImageView
-            android:id="@+id/icon"
+            android:id="@+id/eventFlag"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="0px"
@@ -36,25 +36,25 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/label"
+            android:id="@+id/eventNameLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/event_name"></TextView>
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/eventLocationLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/event_location" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/eventTimeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/event_time" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/eventDateLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/event_date" />
