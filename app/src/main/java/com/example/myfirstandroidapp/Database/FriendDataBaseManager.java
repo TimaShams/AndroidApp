@@ -13,10 +13,10 @@ import java.util.ArrayList;
 
 public class FriendDataBaseManager {
 
-    public static final String DB_NAME = "FriendsRecords";
-    public static final String DB_TABLE = "Freinds";
+    public static final String DB_NAME = "myFriendsRecords";
+    public static final String DB_TABLE = "myFreindsTable";
     public static final int DB_VERSION = 1;
-    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (FriendID INTEGER , FirstName TEXT, LastName TEXT, Gender TEXT, Age INTEGER , Address TEXT );";
+    private static final String CREATE_TABLE = "CREATE TABLE " + DB_TABLE + " (FriendID INTEGER , FirstName TEXT, LastName TEXT, Gender TEXT, Age INTEGER , Address TEXT , ImageTag TEXT);";
     private SQLHelper helper;
     private SQLiteDatabase db;
     private Context context;
@@ -37,7 +37,7 @@ public class FriendDataBaseManager {
         helper.close();
     }
 
-    public boolean addRow( int friendID , String fname, String lname , String gender , int age , String address) {
+    public boolean addRow( int friendID , String fname, String lname , String gender , int age , String address , String imageTag) {
         synchronized(this.db) {
 
             ContentValues newProduct = new ContentValues();
@@ -47,6 +47,8 @@ public class FriendDataBaseManager {
             newProduct.put("Gender", gender);
             newProduct.put("Age", age);
             newProduct.put("Address", address);
+            newProduct.put("ImageTag", imageTag);
+
 
             try {
                 db.insertOrThrow(DB_TABLE, null, newProduct);
@@ -63,12 +65,12 @@ public class FriendDataBaseManager {
     public ArrayList<Friend> retrieveRows() {
 
         ArrayList<Friend> friendRow = new ArrayList<Friend>();
-        String[] columns = new String[] {"FriendID" ,"FirstName", "LastName", "Gender" , "Age" , "Address"};
+        String[] columns = new String[] {"FriendID" ,"FirstName", "LastName", "Gender" , "Age" , "Address" , "ImageTag"};
         Cursor cursor = db.query(DB_TABLE, columns, null, null, null, null, null);
         cursor.moveToFirst();
         while (cursor.isAfterLast() == false) {
 
-            Friend s = new Friend(cursor.getInt(0) , cursor.getString(1), cursor.getString(2) , cursor.getString(3) , cursor.getInt(4) , cursor.getString(5));
+            Friend s = new Friend(cursor.getInt(0) , cursor.getString(1), cursor.getString(2) , cursor.getString(3) , cursor.getInt(4) , cursor.getString(5) , cursor.getString(6));
             friendRow.add(s);
             cursor.moveToNext();
         }

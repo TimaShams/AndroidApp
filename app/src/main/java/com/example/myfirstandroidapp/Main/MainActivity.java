@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.myfirstandroidapp.Adapters.MapsActivity;
 import com.example.myfirstandroidapp.Events.EventsActivity;
 import com.example.myfirstandroidapp.Friends.FriendsActivity;
 import com.example.myfirstandroidapp.R;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(context, ToDoActivity.class);
                 startActivity(intent);
+
             }
         });
 

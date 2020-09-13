@@ -87,10 +87,10 @@ public class EventCustomAdapter extends ArrayAdapter<Event> {
                 System.out.println("selected "+date);
                 if (new Date().after(date)) {
                     System.out.println(" your date is before the current date ");
-                    viewHolder.flag.setImageResource(R.drawable.history);
+                    viewHolder.flag.setImageResource(R.drawable.app_logo);
                 }
                 else{
-                    viewHolder.flag.setImageResource(R.drawable.current);
+                    viewHolder.flag.setImageResource(R.drawable.app_logo);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();

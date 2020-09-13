@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -85,10 +87,28 @@ public class AddFriendActivity extends AppCompatActivity implements GalleryDialo
         Upload_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage(context);
+
+                Intent i = new Intent(AddFriendActivity.this , profilePictureActivity.class);
+                startActivity(i);
+                //selectImage(context);
 
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+
+            int resID = context.getResources().getIdentifier(extras.getString("selectedImg") , "drawable", context.getPackageName());
+            IDProf.setImageResource(resID);
+            IDProf.setTag(extras.getString("selectedImg"));
+
+        }else
+        {IDProf.setImageResource(R.drawable.app_logo);
+
+            IDProf.setTag("app_logo");
+
+
+        }
 
 
         Intent i = getIntent();
@@ -124,6 +144,7 @@ public class AddFriendActivity extends AppCompatActivity implements GalleryDialo
 
                 //FriendsActivity.name = String.valueOf(fname.getText());
                 Intent i = new Intent(AddFriendActivity.this, FriendsActivity.class);
+                i.putExtra("image",String.valueOf(IDProf.getTag()));
                 i.putExtra("fname",String.valueOf(fname.getText()));
                 i.putExtra("lname",String.valueOf(lname.getText()));
                 i.putExtra("address",String.valueOf(address.getText()));
@@ -244,6 +265,10 @@ public class AddFriendActivity extends AppCompatActivity implements GalleryDialo
             }
         }
     }
+
+
+
+
 
 
 }

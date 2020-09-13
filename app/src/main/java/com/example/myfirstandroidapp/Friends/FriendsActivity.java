@@ -121,7 +121,8 @@ public class FriendsActivity extends AppCompatActivity {
                         extras.getString("lname"),
                         extras.getString("gender"),
                         extras.getInt("age" , 0),
-                        extras.getString("address")
+                        extras.getString("address"),
+                        extras.getString("image")
                 );
 
             }
@@ -137,7 +138,7 @@ public class FriendsActivity extends AppCompatActivity {
                         extras.getString("lname"),
                         extras.getString("gender"),
                         extras.getInt("age" , 0),
-                        extras.getString("address")
+                        extras.getString("address"),extras.getString("image")
                 );
 
             }

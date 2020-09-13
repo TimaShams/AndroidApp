@@ -66,8 +66,8 @@ public class FriendCustomAdapter extends ArrayAdapter<Friend> {
         viewHolder.ageLabel.setText(friendListValues.get(position).getAge()+" ");
         viewHolder.genderLabel.setText(friendListValues.get(position).getGender());
         viewHolder.addressLabel.setText(friendListValues.get(position).getAddress());
-        //viewHolder.editButton.ste
-        //viewHolder.displayPicture
+        int resID = context.getResources().getIdentifier(friendListValues.get(position).getImgTag() , "drawable", context.getPackageName());
+        viewHolder.displayPicture.setImageResource(resID);
         return convertView;
     }
 

@@ -13,14 +13,16 @@ public class Friend implements Serializable {
     private String gender  = "";
     private int age = 0;
     private String address  = "";
+    private String imgTag ="";
 
-    public Friend(int friendID , String fname, String lname, String gender , int age , String address) {
+    public Friend(int friendID , String fname, String lname, String gender , int age , String address , String imgTag) {
         this.friendID = friendID;
         this.fname = fname;
         this.lname = lname;
         this.gender = gender;
         this.age = age;
         this.address = address;
+        this.imgTag = imgTag;
     }
 
 
@@ -71,6 +73,14 @@ public class Friend implements Serializable {
 
     public void setFriendID(int friendID) {
         this.friendID = friendID;
+    }
+
+    public String getImgTag() {
+        return imgTag;
+    }
+
+    public void setImgTag(String imgTag) {
+        this.imgTag = imgTag;
     }
 }
 
